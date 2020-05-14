@@ -1,0 +1,38 @@
+---
+- hosts: servers
+  become: yes
+  tasks:
+    - name: install Apache server
+      yum:
+        name: httpd
+        state: latest
+  
+    - name: install tar to unzip tar files
+      yum:
+        name: tar
+        state: latest
+    
+    - name: install unzip
+      yum:
+        name: unzip
+        state: latest
+
+    - name: Creates directory
+      file:
+        path: /home/ansibleadmin/php_package
+        state: directory
+
+    - name: Gets tarball
+      get_url:
+        url: "https://www.php.net/distributions/php-7.2.31.tar.gz"
+        dest: "/home/ansibleadmin/"
+      # Set the state of the task in a var
+      register: php_package
+
+    - name: Unarchive source
+      unarchive:
+        src: "/home/ansibleadmin/php-7.2.31.tar.gz"
+        dest: "/home/ansibleadmin/php_package/"
+        remote_src: yes
+      # Execute the task only when the state of the previous task is changed
+      when: php_package.changed

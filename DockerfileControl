@@ -24,6 +24,8 @@ RUN adduser ansibleadmin
 RUN gpasswd -a ansibleadmin wheel
 RUN echo "dockerpassword\ndockerpassword" | passwd root --stdin
 
+COPY playbook.yml /home/ansibleadmin/
+
 RUN yum install -y openssh-clients
 
 #Create ssh key
