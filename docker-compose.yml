@@ -1,0 +1,29 @@
+version: "3.3"
+
+services:
+    ansible-managed:        
+        image: jdeathe/centos-ssh:2.6.1
+        networks:
+            simple-docker-centos-ansible-vpc:
+                ipv4_address: 10.0.5.3
+        ports:
+            - "22"
+        environment:
+            - SSH_PASSWORD_AUTHENTICATION=true
+            - SSH_SUDO=ALL=(ALL) NOPASSWD:ALL
+            - SSH_USER=ansibleadmin
+            - SSH_USER_PASSWORD=dockerpassword
+    ansible-control:
+        build:
+            context: ./
+            dockerfile: DockerfileControl       
+        networks:
+            simple-docker-centos-ansible-vpc:
+                ipv4_address: 10.0.5.2        
+
+networks:
+    simple-docker-centos-ansible-vpc:
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 10.0.5.0/24

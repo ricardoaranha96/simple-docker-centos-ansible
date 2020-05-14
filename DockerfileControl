@@ -1,0 +1,32 @@
+FROM centos:7
+ENV container docker
+RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
+systemd-tmpfiles-setup.service ] || rm -f $i; done); \
+rm -f /lib/systemd/system/multi-user.target.wants/*;\
+rm -f /etc/systemd/system/*.wants/*;\
+rm -f /lib/systemd/system/local-fs.target.wants/*; \
+rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
+rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
+rm -f /lib/systemd/system/basic.target.wants/*;\
+rm -f /lib/systemd/system/anaconda.target.wants/*;
+VOLUME [ "/sys/fs/cgroup" ]
+CMD ["/usr/sbin/init"]
+
+#Required for Ansible installation
+#Reference: https://www.tecmint.com/install-epel-repository-on-centos/
+RUN yum install -y epel-release
+
+RUN yum install -y ansible
+
+COPY hosts /etc/ansible/hosts
+
+RUN adduser ansibleadmin
+RUN gpasswd -a ansibleadmin wheel
+RUN echo "dockerpassword\ndockerpassword" | passwd root --stdin
+
+RUN yum install -y openssh-clients
+
+#Create ssh key
+RUN mkdir /home/ansibleadmin/.ssh
+RUN ssh-keygen -t rsa -f /home/ansibleadmin/.ssh/id_rsa -q -P ""
+RUN chown -R ansibleadmin:ansibleadmin /home/ansibleadmin/.ssh
