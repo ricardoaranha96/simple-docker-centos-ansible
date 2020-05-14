@@ -2,6 +2,16 @@
 - hosts: servers
   become: yes
   tasks:
+
+    - name: test script stdout
+      command: echo "zip"
+      register: custom_package
+
+    - name: install custom package
+      yum:
+        name: "{{ custom_package.stdout }}"
+        state: latest
+
     - name: install Apache server
       yum:
         name: httpd
