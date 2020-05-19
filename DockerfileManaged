@@ -1,0 +1,19 @@
+FROM centos:7
+
+RUN yum install -y openssh-server 
+RUN yum install -y openssh-clients
+
+#https://gist.github.com/pokle/10808069
+RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N ''
+
+RUN systemctl enable sshd.service
+
+RUN adduser ansibleadmin
+RUN gpasswd -a ansibleadmin wheel
+RUN echo "dockerpassword" | passwd ansibleadmin --stdin
+
+RUN yum install -y sudo
+
+RUN sed -i 's/%wheel.*/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
+
+CMD ["/usr/sbin/sshd","-D"]

@@ -22,7 +22,7 @@ COPY hosts /etc/ansible/hosts
 
 RUN adduser ansibleadmin
 RUN gpasswd -a ansibleadmin wheel
-RUN echo "dockerpassword\ndockerpassword" | passwd root --stdin
+RUN echo "dockerpassword" | passwd ansibleadmin --stdin
 
 COPY playbook.yml /home/ansibleadmin/
 
