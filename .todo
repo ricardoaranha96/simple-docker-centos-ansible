@@ -1,1 +1,3 @@
 - [] Configure public key on DockerfileControl and docker-compose
+- [] Solve message in container log: Could not load host key: /etc/ssh/ssh_host_ecdsa_key
+- [] Solve message in container log: Could not load host key: /etc/ssh/ssh_host_ed25519_key
