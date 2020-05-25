@@ -10,6 +10,11 @@ Login on the control node and add the passwordless login to the managed node
 sshpass -p "dockerpassword" ssh-copy-id ansibleadmin@10.0.5.3 -o StrictHostKeyChecking=no
 ```
 
+Run a playbook against the managed host
+```shell
+ansible-playbook playbook.yml
+```
+
 ## References:
 - https://www.redhat.com/en/blog/system-administrators-guide-getting-started-ansible-fast
 - https://docs.docker.com/engine/examples/running_ssh_service/
